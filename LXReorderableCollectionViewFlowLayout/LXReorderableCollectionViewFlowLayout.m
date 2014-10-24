@@ -231,11 +231,12 @@ static NSString * const kLXCollectionViewKeyPath = @"collectionView";
             translation = CGPointMake(0.0f, distance);
         } break;
         case LXScrollingDirectionDown: {
-            CGFloat maxY = MAX(contentSize.height, frameSize.height) - frameSize.height + contentInset.bottom;
+            CGFloat visibleHeight = frameSize.height - contentInset.bottom - contentInset.top;
             
-            if ((contentOffset.y + distance) >= maxY) {
-                distance = maxY - contentOffset.y;
-            }
+            if( visibleHeight > contentSize.height )
+                distance = 0.0;
+            else if( contentOffset.y + distance + visibleHeight + contentInset.top > contentSize.height )
+                distance = contentSize.height - contentOffset.y - visibleHeight - contentInset.top;
             
             translation = CGPointMake(0.0f, distance);
         } break;
